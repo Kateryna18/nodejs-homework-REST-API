@@ -1,13 +1,13 @@
 const {HttpError, ctrlWrapper} = require("../helpers");
 const Contact = require("../models/contact");
-const { JoiSchema } = require("../schemas");
+const { shemas } = require("../schemas");
 
 const getAll= async (req, res) => {
       const result = await Contact.find();
       res.json(result);
   };
   
- const getById = async (req, res) => {
+  const getById = async (req, res) => {
       const { contactId } = req.params;
       const result = await Contact.findById(contactId);
       if (!result) {
@@ -17,7 +17,7 @@ const getAll= async (req, res) => {
   };
   
   const addContact = async (req, res) => {
-      const { error } = JoiSchema.validate(req.body);
+      const { error } = shemas.JoiSchema.validate(req.body);
       if (error) {
         throw HttpError(400, error.message)
       }
@@ -35,7 +35,7 @@ const getAll= async (req, res) => {
   };
   
   const updateById = async (req, res) => {
-      const { error } = JoiSchema.validate(req.body);
+      const { error } = shemas.JoiSchema.validate(req.body);
       if (error) {
         throw HttpError(400, error.message)
       }
@@ -46,6 +46,19 @@ const getAll= async (req, res) => {
       }
       res.status(200).json(result);
   };
+
+  const updateFavorite = async (req, res) => {
+    const { error } = shemas.updateFavoriteSchema.validate(req.body);
+    if (error) {
+      throw HttpError(400, error.message)
+    }
+    const { contactId } = req.params;
+    const result = await Contact.findByIdAndUpdate(contactId, req.body, {new: true});
+    if (!result) {
+      throw HttpError(404, "Not found");
+    }
+    res.status(200).json(result);
+};
   
   module.exports = {
     getAll: ctrlWrapper(getAll),
@@ -53,4 +66,5 @@ const getAll= async (req, res) => {
     addContact: ctrlWrapper(addContact),
     deleteContact: ctrlWrapper(deleteContact),
     updateById: ctrlWrapper(updateById),
+    updateFavorite: ctrlWrapper(updateFavorite),
   };

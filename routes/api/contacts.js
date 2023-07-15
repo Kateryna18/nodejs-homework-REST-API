@@ -2,8 +2,8 @@ const express = require("express");
 const router = express.Router();
 
 const ctrl = require("../../controllers/contacts");
-
 const { isValidId } = require("../../middlewares");
+const { shemas } = require("../../schemas")
 
 
 router.get("/", ctrl.getAll);
@@ -14,7 +14,9 @@ router.post("/", ctrl.addContact);
 
 router.delete("/:contactId", isValidId, ctrl.deleteContact);
 
-router.put("/:contactId", isValidId, JoiSchema.validate(req.body), ctrl.updateById);
+router.put("/:contactId", isValidId, ctrl.updateById);
+
+router.patch("/:contactId/favorite", isValidId, ctrl.updateFavorite)
 
 
 module.exports = router;
