@@ -16,9 +16,13 @@ const contactSchema = new Schema({
         type: Boolean,
         default: false,
       },
+      owner: {
+        type: Schema.Types.ObjectId,
+        ref: 'user',
+      },
 })
 
-contactSchema.post("save", handleMongooseError)
+contactSchema.post("save", handleMongooseError);
 
 const Contact = model("contact", contactSchema);
 
