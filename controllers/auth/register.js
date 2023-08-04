@@ -5,7 +5,7 @@ require('dotenv').config();
 const { HttpError, sendEmail } = require("../../helpers");
 const { User } = require("../../models/index");
 
-// const { BASE_URL } = process.env;
+const { BASE_URL } = process.env;
 
 const register = async (req, res) => {
     const { email, password } = req.body;
@@ -23,13 +23,13 @@ const register = async (req, res) => {
 
     const newUser = await User.create({ ...req.body, password: hashPassword, avatarURL, verificationToken });
 
-    // const verifyEmail = {
-    //   to: email,
-    //   subject: "verify email",
-    //   html: `<a href="${BASE_URL}/api/users/verify/${verificationToken}">Click verify email</a>`
-    // }
+    const verifyEmail = {
+      to: email,
+      subject: "verify email",
+      html: `<a href="${BASE_URL}/api/users/verify/${verificationToken}">Click verify email</a>`
+    }
 
-    // const resultSend = await sendEmail(verifyEmail);
+    await sendEmail(verifyEmail);
     
     res.status(201).json({
       email: newUser.email,

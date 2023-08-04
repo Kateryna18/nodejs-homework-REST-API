@@ -11,11 +11,14 @@ const nodemailerConfig = {
     },
   };
 
+
 const transporter = nodemailer.createTransport(nodemailerConfig);
+
+
 
 const sendEmail = async(data) => {
     const email = {...data, from: "katerynahumeniuk@meta.ua"};
-    await transporter.sendMail(email);
+    const info = await transporter.sendMail(email);
     return true;
 }
 
